@@ -6,8 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-graphene = "*"
-psycopg2-binary = "*"
 django-graphql-jwt = "*"
 django = "*"
 django-nose = "*"
@@ -16,6 +14,9 @@ coverage = "*"
 autopep8 = "*"
 pep8 = "*"
 python-decouple = "*"
+psycopg2-binary = "*"
+graphene = "==2.1.6"
+graphene-django = "==2.3.2"
 
 [requires]
 python_version = "3.7"
