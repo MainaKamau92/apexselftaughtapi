@@ -8,6 +8,25 @@ def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'apexselftaught.settings')
     try:
         from django.core.management import execute_from_command_line
+        is_testing = 'test' in sys.argv
+        if is_testing:
+            import coverage
+
+            cov = coverage.coverage(source=['apexselftaught'], omit=[
+                                    '*/tests/*',
+                                    'apexselftaught/apps/authentication/apps.py',
+                                    '*/migrations/*', 'apexselftaught/wsgi.py',
+                                    'apexselftaught/settings.py'])
+            cov.set_option('report:show_missing', True)
+            cov.erase()
+            cov.start()
+        # Add this 5 line above
+        execute_from_command_line(sys.argv)
+        # and add this 4 line below
+        if is_testing:
+            cov.stop()
+            cov.save()
+            cov.report()
     except ImportError as exc:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "
