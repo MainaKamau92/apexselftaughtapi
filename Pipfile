@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+graphene = "*"
+psycopg2-binary = "*"
+django-graphql-jwt = "*"
+django = "*"
+django-nose = "*"
+coveralls = "*"
+coverage = "*"
+autopep8 = "*"
+pep8 = "*"
+python-decouple = "*"
+
+[requires]
+python_version = "3.7"
