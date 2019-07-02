@@ -17,6 +17,7 @@ python-decouple = "*"
 psycopg2-binary = "*"
 graphene = "==2.1.6"
 graphene-django = "==2.3.2"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
