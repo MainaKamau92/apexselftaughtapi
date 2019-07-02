@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'apexselftaught.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD',),
-        'HOST': config('HOST'),
-        'PORT': config('PORT'),
+        'NAME': config('DB_NAME', 'apexselftaught'),
+        'USER': config('DB_USER', 'postgres'),
+        'PASSWORD': config('DB_PASSWORD', 'postgres'),
+        'HOST': config('HOST', 'localhost'),
+        'PORT': config('PORT', 5432),
     }
 }
 
