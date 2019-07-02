@@ -1,5 +1,6 @@
 import re
 from graphql import GraphQLError
+from apexselftaught.utils.messages.authentication import AUTH_ERROR_RESPONSES
 
 
 class Validation:
@@ -15,26 +16,30 @@ class Validation:
             match = re.search(
                 r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', email, re.I)
             return match.group()
-        except NoneType as e:
-            raise AttributeError(str(e))
+        except:
+            raise GraphQLError(
+                AUTH_ERROR_RESPONSES["invalid_email"].format(email))
 
     def validate_password(self, password):
         try:
             match = re.match(r'[A-Za-z0-9@#$%^&+=]{8,}', password, re.I)
             return match.group()
-        except NoneType as e:
-            raise AttributeError(str(e))
+        except:
+            raise GraphQLError(
+                AUTH_ERROR_RESPONSES["invalid_password"].format(password))
 
     def validate_username(self, username):
         try:
             match = re.match(r'^[a-zA-Z0-9_.-]+$', username, re.I)
             return match.group()
-        except NoneType as e:
-            raise AttributeError(str(e))
+        except:
+            raise GraphQLError(
+                AUTH_ERROR_RESPONSES["invalid_username"].format(username))
 
     def validate_mobile(self, moblie_number):
         try:
             match = re.match(r'^(?:\+?44)?[07]\d{9,13}$', moblie_number, re.I)
             return match.group()
-        except NoneType as e:
-            raise AttributeError(str(e))
+        except:
+            raise GraphQLError(
+                AUTH_ERROR_RESPONSES["invalid_mobile_number"].format(moblie_number))

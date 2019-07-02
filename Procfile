@@ -1,2 +1,2 @@
-web: gunicorn healthid.wsgi
+web: gunicorn apexselftaught.wsgi
 release: python manage.py makemigrations && python manage.py migrate

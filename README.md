@@ -30,3 +30,6 @@ For the web application to run locally a few requirements are necessary:
 * All the listed dependencies in the **requirements.txt** file
 * Git
 >> NB: All the commands in the README.md on setup and running assume a windows based environment
+
+# Heroku hosting
+The api is hosted on [heroku](https://apexselftaughtapi.herokuapp.com/apexselftaught/)
