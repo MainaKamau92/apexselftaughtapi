@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/MainaKamau92/apexselftaughtapi.svg?branch=develop)](https://travis-ci.com/MainaKamau92/apexselftaughtapi)
+[![Coverage Status](https://coveralls.io/repos/github/MainaKamau92/apexselftaughtapi/badge.svg?branch=ch-travis-integration-166927852)](https://coveralls.io/github/MainaKamau92/apexselftaughtapi?branch=ch-travis-integration-166927852)
+
+
 # Project Title
 
 Apex Online
@@ -24,5 +28,5 @@ For the web application to run locally a few requirements are necessary:
 * Pip(the python package installer)
 * Postgres database admin ( for managing the database)
 * All the listed dependencies in the **requirements.txt** file
-* Git 
+* Git
 >> NB: All the commands in the README.md on setup and running assume a windows based environment
