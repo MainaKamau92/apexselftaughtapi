@@ -1,10 +1,11 @@
 import graphene
-from graphene_django import DjangoObjectType
-from datetime import datetime
-from graphql import GraphQLError
+
+from apexselftaught.utils.generate_token import generate_web_token
 from ..models import User
 from .auth_queries import UserType
 from apexselftaught.utils.validations import Validation
+from django.db import IntegrityError
+from django.contrib.auth import authenticate
 
 
 class RegisterUser(graphene.Mutation):
@@ -16,6 +17,8 @@ class RegisterUser(graphene.Mutation):
         password = graphene.String()
         mobile_number = graphene.String()
 
+    errors = graphene.String()
+
     def mutate(self, info, **kwargs):
         username = kwargs.get('username')
         email = kwargs.get('email')
@@ -24,12 +27,35 @@ class RegisterUser(graphene.Mutation):
 
         validate_data = Validation().validate_data_fields(
             username, email, mobile_number, password)
-        user = User.objects.create_user(**validate_data)
+        try:
+            user = User.objects.create_user(**validate_data)
+            user.set_password(kwargs.get('password'))
+            user.save()
+            return RegisterUser(user=user)
+        except IntegrityError as e:
+            return RegisterUser(errors=str(e))
 
-        user.set_password(kwargs.get('password'))
-        user.save()
-        return RegisterUser(user=user)
+
+class LoginUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    error = graphene.String()
+    token = graphene.String()
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+
+    def mutate(self, info, **kwargs):
+        email = Validation.validate_email(email=kwargs.get('email'))
+        password = Validation.validate_password(password=kwargs.get('password'))
+
+        user = authenticate(username=email, password=password)
+        token = generate_web_token(user.username)
+
+        if user:
+            return LoginUser(token=token)
 
 
 class Mutation(graphene.ObjectType):
     register_user = RegisterUser.Field()
+    login_user = LoginUser.Field()
