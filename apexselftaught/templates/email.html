@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Apex Self Taught Email Verification</title>
+    <style>
+        @font-face {
+            font-family: "Helvetica Neue";
+        }
+
+        .card {
+            font-family: "Helvetica Neue";
+            text-align: center;
+            margin: auto;
+            width: 40%;
+        }
+
+        .card-img-top {
+            margin-top: 50px;
+            height: 150px;
+            width: 250px;
+        }
+
+        .btn {
+            padding: 7px;
+            margin-bottom: 10px;
+            background: #993CF3;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="card">
+    <img class="card-img-top"
+         src="https://res.cloudinary.com/dae3oj71g/image/upload/v1563015645/gears-686316.jpg"
+         alt="ast_logo">
+    <div class="card-body">
+        <h5 class="card-title text-center">{{ template_type }}</h5>
+        <p class="card-text text-center"><strong>{{ small_text_detail }}</strong></p>
+    </div>
+    <div class="card-body">
+        <p class="text-center">{{ email }}</p>
+    </div>
+    <a class="text-center verify-button" href=" {{ domain }}{% url "activate"  token=token %}">
+        <button type="button" class="btn">Verify Account</button>
+    </a>
+    <div class="card-footer">
+        <small class="text-muted">
+            Didn’t create an account? Feel free to ignore this email or
+            <span style="color: navy"><u>CONTACT US</u></span> if you have any
+            issues.
+        </small>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

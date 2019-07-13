@@ -18,7 +18,10 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
+from apexselftaught.apps.authentication.views import activate_account
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('apexselftaught/', csrf_exempt(GraphQLView.as_view(graphiql=True)))
+    path('apexselftaught/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('apexselftaught/activate/<token>', activate_account, name='activate'),
 ]

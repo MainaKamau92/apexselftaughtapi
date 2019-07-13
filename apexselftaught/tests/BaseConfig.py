@@ -5,7 +5,6 @@ from .test_fixtures.authenticantion import login_user_query
 from apexselftaught.apps.authentication.models import User
 
 
-
 class BaseConfiguration(TestCase):
 
     @classmethod

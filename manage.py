@@ -12,11 +12,7 @@ def main():
         if is_testing:
             import coverage
 
-            cov = coverage.coverage(source=['apexselftaught'], omit=[
-                                    '*/tests/*',
-                                    'apexselftaught/apps/authentication/apps.py',
-                                    '*/migrations/*', 'apexselftaught/wsgi.py',
-                                    'apexselftaught/settings.py'])
+            cov = coverage.coverage(source=['apexselftaught'], )
             cov.set_option('report:show_missing', True)
             cov.erase()
             cov.start()

@@ -1,6 +1,6 @@
 import graphene
-
 from apexselftaught.utils.generate_token import generate_web_token
+from apexselftaught.utils.send_email import send_confirmation_email
 from ..models import User
 from .auth_queries import UserType
 from apexselftaught.utils.validations import Validation
@@ -31,6 +31,7 @@ class RegisterUser(graphene.Mutation):
             user = User.objects.create_user(**validate_data)
             user.set_password(kwargs.get('password'))
             user.save()
+            send_confirmation_email(email, username)
             return RegisterUser(user=user)
         except IntegrityError as e:
             return RegisterUser(errors=str(e))

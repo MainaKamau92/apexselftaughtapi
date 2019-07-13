@@ -20,12 +20,6 @@ class UserManager(BaseUserManager):
 
     def create_user(self, username, email, mobile_number, password=None):
         """Create and return a `User` with an email, username and password."""
-        if username is None:
-            raise TypeError('User must have a username.')
-
-        if email is None:
-            raise TypeError('User must have an email address.')
-
         user = self.model(username=username, email=self.normalize_email(
             email), mobile_number=mobile_number)
         user.set_password(password)
@@ -108,7 +102,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.email
 
-    @property
     def get_full_name(self):
         """
         This method is required by Django for things like handling emails.
