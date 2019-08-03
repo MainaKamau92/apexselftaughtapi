@@ -45,9 +45,11 @@
     <div class="card-body">
         <p class="text-center">{{ email }}</p>
     </div>
-    <a class="text-center verify-button" href=" {{ domain }}{% url "activate"  token=token %}">
-        <button type="button" class="btn">Verify Account</button>
-    </a>
+    {% block content %}
+        <a class="text-center verify-button" href=" {{ domain }}{% url "activate"  token=token %}">
+            <button type="button" class="btn">Verify Account</button>
+        </a>
+    {% endblock %}
     <div class="card-footer">
         <small class="text-muted">
             Didn’t create an account? Feel free to ignore this email or

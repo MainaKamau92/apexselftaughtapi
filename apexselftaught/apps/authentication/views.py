@@ -1,19 +1,22 @@
 from decouple import config
 import jwt
-
+import json
 from django.conf import settings
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views import View
 
 from apexselftaught.apps.authentication.models import User
+from apexselftaught.utils.validations import Validation
 
 REDIRECT_LINK = settings.REDIRECT_LINK
+
+secret = config("SECRET")
 
 
 def activate_account(request, token):
     link = None
-    secret = config("SECRET")
     username = jwt.decode(token, secret, algorithms=['HS256'])["user"]
-    print(username)
     user = User.objects.get(username=username)
     if username:
         user.is_verified = True
@@ -40,3 +43,23 @@ def activate_account(request, token):
     return render(
         request, 'verification.html',
         context=context, status=status)
+
+
+class PasswordResetView(View):
+
+    def put(self, request, token):
+        data = json.loads(request.body)
+        username = jwt.decode(token, secret, algorithms=['HS256'])["user"]
+        user = User.objects.get(username=username)
+        if username:
+            try:
+                new_password = data.get('user').get('password')
+                valid_password = Validation.validate_password(new_password)
+                user.set_password(valid_password)
+                user.save()
+                status = 200
+                return JsonResponse({"response": "Success"}, status=status)
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=400)
+
+        return JsonResponse({"fail": "Invalid token"}, status=400)

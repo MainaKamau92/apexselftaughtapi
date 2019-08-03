@@ -98,10 +98,6 @@ db.sqlite3
 #vscode
 .vscode/*
 
-#Pipfile
-
-Pipfile
-Pipfile.lock
 
 # migrations
 **/migrations/**
