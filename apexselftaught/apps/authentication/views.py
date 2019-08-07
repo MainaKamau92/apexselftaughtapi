@@ -16,6 +16,7 @@ secret = config("SECRET")
 
 def activate_account(request, token):
     link = None
+    secret = config("SECRET")
     username = jwt.decode(token, secret, algorithms=['HS256'])["user"]
     user = User.objects.get(username=username)
     if username:

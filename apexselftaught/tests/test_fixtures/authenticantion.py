@@ -10,6 +10,29 @@ register_user_query = '''
 mutation {
   registerUser(username:"johnydoe" email: "johnydoe@test.com", mobileNumber:"0713116974", password: "johnydoe123"){
     user {
+      email
+    }
+    errors
+  }
+}
+
+'''
+register_user_query2 = '''
+mutation {
+  registerUser(username:"marydoe" email: "marydoe@test.com", mobileNumber:"0713516974", password: "marydoe123"){
+    user {
+      id
+      email
+    }
+    errors
+  }
+}
+
+'''
+register_user_query3 = '''
+mutation {
+  registerUser(username:"philipdoe" email: "philipdoe@test.com", mobileNumber:"0712116974", password: "philipdoe123"){
+    user {
       id
       email
     }
@@ -69,7 +92,7 @@ get_all_users_query = '''
 '''
 get_single_user_query = '''
 {
-  user(id:4){
+  user(id:8){
     id
     username
   }

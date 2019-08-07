@@ -18,12 +18,14 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
-from apexselftaught.apps.authentication.views import activate_account, PasswordResetView
+from apexselftaught.apps.authentication.views import activate_account,\
+                                                     PasswordResetView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('apexselftaught/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('apexselftaught/activate/<token>', activate_account, name='activate'),
-    path('apexselftaught/reset_password/<token>', csrf_exempt(PasswordResetView.as_view()), name='reset_password'),
+    path('apexselftaught/reset_password/<token>',
+         csrf_exempt(PasswordResetView.as_view()), name='reset_password'),
 
 ]

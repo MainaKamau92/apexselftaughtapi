@@ -1,13 +1,14 @@
 import graphene
 from apexselftaught.apps.authentication.schemas import AuthMutation
 from apexselftaught.apps.authentication.schemas import AuthQuery
+from apexselftaught.apps.profiles.schemas import ProfileMutation, ProfileQuery
 
 
-class Query(AuthQuery, graphene.ObjectType):
+class Query(AuthQuery, ProfileQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, graphene.ObjectType):
+class Mutation(AuthMutation, ProfileMutation, graphene.ObjectType):
     pass
 
 

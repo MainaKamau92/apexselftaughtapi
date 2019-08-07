@@ -1,11 +1,12 @@
 import graphene
-from apexselftaught.utils.send_email import send_confirmation_email, password_reset_link
+from apexselftaught.utils.send_email import send_confirmation_email, \
+    password_reset_link
 from ..models import User
 from .auth_queries import UserType
 from apexselftaught.utils.validations import Validation
 from django.db import IntegrityError
 from django.contrib.auth import authenticate
-from graphql_jwt.utils import jwt_encode, jwt_payload
+from apexselftaught.utils.generate_token import generate_login_token
 
 
 class RegisterUser(graphene.Mutation):
@@ -48,13 +49,15 @@ class LoginUser(graphene.Mutation):
 
     def mutate(self, info, **kwargs):
         email = Validation.validate_email(email=kwargs.get('email'))
-        password = Validation.validate_password(password=kwargs.get('password'))
+        password = Validation.validate_password(
+            password=kwargs.get('password'))
 
         user = authenticate(username=email, password=password)
+
         error_message = 'Invalid login credentials'
+
         if user:
-            payload = jwt_payload(user)
-            token = jwt_encode(payload)
+            token = generate_login_token(user)
             return LoginUser(token=token)
         return LoginUser(errors=error_message)
 
@@ -72,7 +75,8 @@ class RequestRequestPassword(graphene.Mutation):
         user = User.objects.get(email=valid_email)
         if user:
             reset_link = password_reset_link(valid_email, user.username)
-            return RequestRequestPassword(success='Email sent', link=reset_link)
+            return RequestRequestPassword(success='Email sent',
+                                          link=reset_link)
         return RequestRequestPassword(error='Invalid email')
 
 

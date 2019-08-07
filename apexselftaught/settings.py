@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'django_nose',
-    'apexselftaught.apps.authentication'
+    'apexselftaught.apps.authentication',
+    'apexselftaught.apps.profiles'
 ]
 
 MIDDLEWARE = [

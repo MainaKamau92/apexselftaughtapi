@@ -1,8 +1,6 @@
 # using SendGrid's Python Library
 # https://github.com/sendgrid/sendgrid-python
 import os
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
 from decouple import config
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail

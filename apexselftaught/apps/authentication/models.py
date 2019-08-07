@@ -1,8 +1,3 @@
-import os
-
-from datetime import datetime, timedelta, date
-
-from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )

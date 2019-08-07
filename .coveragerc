@@ -4,6 +4,7 @@
 omit=
     */tests/*
     apexselftaught/apps/authentication/apps.py
+    apexselftaught/apps/profiles/apps.py
     */migrations/*
     apexselftaught/wsgi.py
     apexselftaught/settings.py

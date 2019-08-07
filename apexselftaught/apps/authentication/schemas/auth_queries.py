@@ -1,9 +1,8 @@
-
 import graphene
 from graphene_django import DjangoObjectType
-from datetime import datetime
 from graphql import GraphQLError
 from ..models import User
+from graphql_jwt.decorators import login_required
 
 
 class UserType(DjangoObjectType):
@@ -15,9 +14,11 @@ class Query(graphene.ObjectType):
     user = graphene.Field(UserType, id=graphene.Int(required=True))
     users = graphene.List(UserType)
 
+    @login_required
     def resolve_users(self, info):
         return User.objects.all()
 
+    @login_required
     def resolve_user(self, info, **kwargs):
         id = kwargs.get('id')
         try:
