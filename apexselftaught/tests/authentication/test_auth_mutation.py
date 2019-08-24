@@ -1,17 +1,16 @@
 from apexselftaught.apps.authentication.models import User
 from apexselftaught.tests.BaseConfig import BaseConfiguration
 from apexselftaught.tests.test_fixtures.authenticantion import \
-    register_user_query, invalid_register_query, login_query,\
-    register_user_query2, register_user_query3,\
-    get_all_users_query, get_single_user_query, get_inexistent_user_query
+    register_user_query, invalid_register_query, login_query, \
+    get_all_users_query, get_single_user_query, get_inexistent_user_query, login_user_query
+from ..factories.factories import UserFactory
 
 
 class UserTestCase(BaseConfiguration):
-
     def test_create_user(self):
         response = self.query(register_user_query)
         data = response.get('data')
-        self.assertEquals(data, {"registerUser": {
+        self.assertEqual(data, {"registerUser": {
             'errors': None,
             "user": {
                 "email": "johnydoe@test.com"
@@ -31,9 +30,9 @@ class UserTestCase(BaseConfiguration):
         user = User.objects.get(username="username")
         short_name = User.objects.get(username="username").get_short_name()
         full_name = User.objects.get(username="username").get_full_name()
-        self.assertEquals(str(user), "test@test.com")
-        self.assertEquals(str(short_name), "username")
-        self.assertEquals(str(full_name), "username")
+        self.assertEqual(str(user), "test@test.com")
+        self.assertEqual(str(short_name), "username")
+        self.assertEqual(str(full_name), "username")
 
     def test_double_registration(self):
         self.query(register_user_query)
@@ -44,25 +43,28 @@ class UserTestCase(BaseConfiguration):
 
     def test_login_user_mutation(self):
         self.query(register_user_query)
+        user = User.objects.get(username="johnydoe")
+        user.is_verified = True
+        user.save()
         response = self.query(login_query)
         data = response.get('data')["loginUser"]["token"]
         self.assertIsNotNone(data)
 
     def test_get_all_users(self):
-        self.query(register_user_query)
-        self.query(register_user_query2)
-        self.query(register_user_query3)
+        for i in range(0, 7):
+            UserFactory()
         token = self.access_token
         response = self.query_with_token(token, get_all_users_query)
         data = response.get('data')["users"]
-        self.assertGreater(len(data), 1)
+        # Eight due to the user created on setUp in BaseConfig
+        self.assertEqual(len(data), 8)
 
     def test_get_a_single_user(self):
         self.query(register_user_query)
         token = self.access_token
         response = self.query_with_token(token, get_single_user_query)
         data = response.get('data')["user"]["username"]
-        self.assertEquals(data, "johnydoe")
+        self.assertEqual(data, "johnydoe")
 
     def test_inexistent_single_user(self):
         self.query(register_user_query)

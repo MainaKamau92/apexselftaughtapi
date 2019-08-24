@@ -24,7 +24,7 @@ class Validation:
     @staticmethod
     def validate_password(password):
         try:
-            match = re.match(r'[A-Za-z0-9@#$%^&+=]{8,}', password, re.I)
+            match = re.match(r'[A-Za-z0-9@#$%^&+_*()=]{8,}', password, re.I)
             return match.group()
         except:
             raise GraphQLError(

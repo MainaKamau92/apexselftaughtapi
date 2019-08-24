@@ -47,7 +47,6 @@ class UpdateProfile(graphene.Mutation):
     message = graphene.String()
 
     class Arguments:
-        id = graphene.Int(required=True)
         first_name = graphene.String()
         last_name = graphene.String()
         secondary_email = graphene.String()
@@ -63,8 +62,7 @@ class UpdateProfile(graphene.Mutation):
     @login_required
     def mutate(self, info, **kwargs):
         user = info.context.user if info.context.user.is_authenticated else None
-        id = kwargs.get("id")
-        profile_model = Profile.objects.get(id=id, user=user)
+        profile_model = Profile.objects.get(user=user)
         if profile_model:
             for (key, value) in kwargs.items():
                 if key is not None:

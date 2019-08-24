@@ -1,8 +1,8 @@
 from graphql import GraphQLError
-
 from apexselftaught.tests.BaseConfig import BaseConfiguration
-from ..test_fixtures.profiles import create_profile_mutation, get_single_profile, get_all_profiles, update_profile, \
-    foreign_update_profile
+from ..test_fixtures.profiles import create_profile_mutation,\
+    get_single_profile, get_all_profiles, update_profile, \
+    foreign_update_profile, me_profile
 from ..factories.factories import UserFactory, ProfileFactory
 
 
@@ -19,22 +19,22 @@ class ProfileTestCase(BaseConfiguration):
         self.query_with_token(token, create_profile_mutation)
         response = self.query_with_token(self.access_token, get_single_profile)
         response_data = response["data"]["profile"]
-        self.assertAlmostEquals(response_data, {'id': '2', 'firstName': 'John', 'lastName': 'Doe'})
+        self.assertAlmostEquals(response_data,
+                                {'id': '2', 'firstName': 'John',
+                                 'lastName': 'Doe'})
 
     def test_user_can_get_multiple_profiles(self):
-        self.user = UserFactory()
-        self.user2 = UserFactory()
-        self.user3 = UserFactory()
-        ProfileFactory(user=self.user)
-        ProfileFactory(user=self.user2)
-        ProfileFactory(user=self.user3)
+        for i in range(0, 7):
+            self.user = UserFactory()
+            ProfileFactory(user=self.user)
         token = self.access_token
         response = self.query_with_token(token, get_all_profiles)
         profile_list = response["data"]["profiles"]
-        self.assertGreater(len(profile_list), 1)
+        print(profile_list)
+        self.assertEqual(len(profile_list), 7)
 
     def test_user_cannot_get_an_inexistent_profile(self):
-        response = self.query_with_token(self.access_token, get_single_profile)
+        self.query_with_token(self.access_token, get_single_profile)
         self.assertRaises(GraphQLError)
 
     def test_user_cannot_create_profile_twice(self):
@@ -48,7 +48,8 @@ class ProfileTestCase(BaseConfiguration):
         self.query_with_token(token, create_profile_mutation)
         response = self.query_with_token(token, update_profile)
         print(response)
-        self.assertIn(response["data"]["updateProfile"]["profile"]["lastName"], "Maina")
+        self.assertIn(response["data"]["updateProfile"]["profile"]["lastName"],
+                      "Maina")
 
     def test_user_cant_update_foreign_profile(self):
         self.user = UserFactory()

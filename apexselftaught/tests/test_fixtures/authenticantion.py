@@ -2,6 +2,8 @@ login_user_query = '''
 mutation {{
   loginUser(email:"{email}", password:"{password}"){{
     token
+    errors
+    verificationPrompt
   }}
 }}
 '''
@@ -79,6 +81,8 @@ login_query = '''
 mutation {
   loginUser(email:"johnydoe@test.com", password:"johnydoe123"){
     token
+    errors
+    verificationPrompt
   }
 }
 '''

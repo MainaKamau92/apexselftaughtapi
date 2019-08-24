@@ -16,7 +16,7 @@ class Profile(models.Model):
     website = models.URLField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.first_name

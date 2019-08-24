@@ -47,7 +47,6 @@ get_all_profiles = """
 update_profile = """
 mutation {
   updateProfile(
-    id: 6,
     avatar: "avatar.rr",
 		country: "Kenya"
 		county: "Thika"
@@ -70,7 +69,6 @@ mutation {
 foreign_update_profile = """
 mutation {
   updateProfile(
-    id: 8,
     avatar: "avatar.rr",
 		country: "Kenya"
 		county: "Thika"
@@ -90,3 +88,20 @@ mutation {
   }
 }
 """
+me_profile = '''
+{
+  me {
+    id
+    firstName
+    lastName
+    avatar
+    country
+    county
+    github
+    industry
+    secondaryEmail
+    userBio
+    website
+  }
+}
+'''

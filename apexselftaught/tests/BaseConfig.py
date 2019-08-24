@@ -25,7 +25,8 @@ class BaseConfiguration(TestCase):
         body = dict()
         body['query'] = query
         response = cls.client.post(
-            GRAPHQL_ENDPOINT, json.dumps(body), content_type='application/json')
+            GRAPHQL_ENDPOINT, json.dumps(body),
+            content_type='application/json')
         json_response = json.loads(response.content.decode())
         return json_response
 
@@ -53,5 +54,5 @@ class BaseConfiguration(TestCase):
         Configurations to be made available before each
         individual test case inheriting from this class.
         """
-        user = UserFactory()
-        self.access_token = generate_login_token(user)
+        self.user = UserFactory()
+        self.access_token = generate_login_token(self.user)

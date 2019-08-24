@@ -24,5 +24,5 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_me(self, info, **kwargs):
-        logged_in_user_profile = info.context.user.is_authenticated
+        logged_in_user_profile = info.context.user if info.context.user.is_authenticated else None
         return Profile.objects.get(user=logged_in_user_profile)

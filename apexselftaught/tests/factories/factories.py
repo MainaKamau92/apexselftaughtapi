@@ -10,10 +10,13 @@ class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = User
 
-    username = factory.LazyAttribute(lambda _: faker.user_name())  # faker.user_name()
-    email = factory.LazyAttribute(lambda _: faker.ascii_email())  # faker.email()
-    mobile_number = factory.LazyAttribute(lambda _: faker.phone_number())  # faker.phone_number()
-    password = faker.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
+    username = factory.LazyAttribute(lambda _: faker.user_name())
+    email = factory.LazyAttribute(lambda _: faker.ascii_email())
+    mobile_number = factory.LazyAttribute(lambda _: faker.phone_number())
+    password = faker.password(length=10, special_chars=True,
+                              digits=True, upper_case=True,
+                              lower_case=True)
+    is_active = True
 
 
 class ProfileFactory(factory.DjangoModelFactory):

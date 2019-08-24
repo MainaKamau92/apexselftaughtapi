@@ -19,6 +19,7 @@ class RegisterUser(graphene.Mutation):
         mobile_number = graphene.String()
 
     errors = graphene.String()
+    success_message = graphene.String()
 
     def mutate(self, info, **kwargs):
         username = kwargs.get('username')
@@ -32,8 +33,9 @@ class RegisterUser(graphene.Mutation):
             user = User.objects.create_user(**validate_data)
             user.set_password(kwargs.get('password'))
             user.save()
+            message = "User created successfully, verification email sent to {}".format(email)
             send_confirmation_email(email, username)
-            return RegisterUser(user=user)
+            return RegisterUser(user=user, success_message=message)
         except IntegrityError as e:
             return RegisterUser(errors=str(e))
 
@@ -42,6 +44,7 @@ class LoginUser(graphene.Mutation):
     user = graphene.Field(UserType)
     errors = graphene.String()
     token = graphene.String()
+    verification_prompt = graphene.String()
 
     class Arguments:
         email = graphene.String()
@@ -55,14 +58,16 @@ class LoginUser(graphene.Mutation):
         user = authenticate(username=email, password=password)
 
         error_message = 'Invalid login credentials'
-
+        verification_error = 'Your email is not verified'
         if user:
-            token = generate_login_token(user)
-            return LoginUser(token=token)
+            if user.is_verified:
+                token = generate_login_token(user)
+                return LoginUser(token=token)
+            return LoginUser(verification_prompt=verification_error)
         return LoginUser(errors=error_message)
 
 
-class RequestRequestPassword(graphene.Mutation):
+class RequestPasswordReset(graphene.Mutation):
     class Arguments:
         email = graphene.String()
 
@@ -72,15 +77,15 @@ class RequestRequestPassword(graphene.Mutation):
 
     def mutate(self, info, email):
         valid_email = Validation.validate_email(email)
-        user = User.objects.get(email=valid_email)
+        user = User.objects.filter(email=valid_email).exists()
         if user:
             reset_link = password_reset_link(valid_email, user.username)
-            return RequestRequestPassword(success='Email sent',
-                                          link=reset_link)
-        return RequestRequestPassword(error='Invalid email')
+            return RequestPasswordReset(success='Email sent with password reset details',
+                                        link=reset_link)
+        return RequestPasswordReset(error='That email does not have a registered account, Sign up for a new account.')
 
 
 class Mutation(graphene.ObjectType):
     register_user = RegisterUser.Field()
     login_user = LoginUser.Field()
-    request_password_reset = RequestRequestPassword.Field()
+    request_password_reset = RequestPasswordReset.Field()
