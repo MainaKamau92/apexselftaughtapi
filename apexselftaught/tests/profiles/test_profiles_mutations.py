@@ -2,7 +2,7 @@ from graphql import GraphQLError
 from apexselftaught.tests.BaseConfig import BaseConfiguration
 from ..test_fixtures.profiles import create_profile_mutation,\
     get_single_profile, get_all_profiles, update_profile, \
-    foreign_update_profile, me_profile
+    foreign_update_profile
 from ..factories.factories import UserFactory, ProfileFactory
 
 
@@ -47,7 +47,6 @@ class ProfileTestCase(BaseConfiguration):
         token = self.access_token
         self.query_with_token(token, create_profile_mutation)
         response = self.query_with_token(token, update_profile)
-        print(response)
         self.assertIn(response["data"]["updateProfile"]["profile"]["lastName"],
                       "Maina")
 

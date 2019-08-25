@@ -2,15 +2,15 @@ create_profile_mutation = '''
 mutation {
   createProfile(
     avatar: "avatar.rr",
-		country: "Kenya"
-		county: "Kisumu"
-		firstName: "John"
-		github: "github/johndoe"
-		industry: "Software"
-		lastName: "Doe"
-		secondaryEmail: ""
-		userBio: "I love to code"
-		website: "johndoe.me"
+    country: "Kenya"
+    county: "Kisumu"
+    firstName: "John"
+    github: "github/johndoe"
+    industry: "Software"
+    lastName: "Doe"
+    secondaryEmail: ""
+    userBio: "I love to code"
+    website: "johndoe.me"
   ){
     profile{
       id
@@ -48,15 +48,15 @@ update_profile = """
 mutation {
   updateProfile(
     avatar: "avatar.rr",
-		country: "Kenya"
-		county: "Thika"
-		firstName: "Lewis"
-		github: "github/mainakamau92"
-		industry: "Software"
-		lastName: "Maina"
-		secondaryEmail: "lewismaina@jack.com"
-		userBio: "I love thinking"
-		website: "lewismaina.me"
+    country: "Kenya"
+    county: "Thika"
+    firstName: "Lewis"
+    github: "github/mainakamau92"
+    industry: "Software"
+    lastName: "Maina"
+    secondaryEmail: "lewismaina@jack.com"
+    userBio: "I love thinking"
+    website: "lewismaina.me"
   ){
     message
     profile{
@@ -70,15 +70,15 @@ foreign_update_profile = """
 mutation {
   updateProfile(
     avatar: "avatar.rr",
-		country: "Kenya"
-		county: "Thika"
-		firstName: "Lewis"
-		github: "github/mainakamau92"
-		industry: "Software"
-		lastName: "Maina"
-		secondaryEmail: "lewismaina@jack.com"
-		userBio: "I love thinking"
-		website: "lewismaina.me"
+    country: "Kenya"
+    county: "Thika"
+    firstName: "Lewis"
+    github: "github/mainakamau92"
+    industry: "Software"
+    lastName: "Maina"
+    secondaryEmail: "lewismaina@jack.com"
+    userBio: "I love thinking"
+    website: "lewismaina.me"
   ){
     message
     profile{
@@ -88,20 +88,3 @@ mutation {
   }
 }
 """
-me_profile = '''
-{
-  me {
-    id
-    firstName
-    lastName
-    avatar
-    country
-    county
-    github
-    industry
-    secondaryEmail
-    userBio
-    website
-  }
-}
-'''

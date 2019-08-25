@@ -2,7 +2,7 @@ from apexselftaught.apps.authentication.models import User
 from apexselftaught.tests.BaseConfig import BaseConfiguration
 from apexselftaught.tests.test_fixtures.authenticantion import \
     register_user_query, invalid_register_query, login_query, \
-    get_all_users_query, get_single_user_query, get_inexistent_user_query, login_user_query
+    get_all_users_query, get_single_user_query, get_inexistent_user_query
 from ..factories.factories import UserFactory
 
 

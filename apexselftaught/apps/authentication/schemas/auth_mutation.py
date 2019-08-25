@@ -33,7 +33,8 @@ class RegisterUser(graphene.Mutation):
             user = User.objects.create_user(**validate_data)
             user.set_password(kwargs.get('password'))
             user.save()
-            message = "User created successfully, verification email sent to {}".format(email)
+            message = "User created successfully,\
+                       verification email sent to {}".format(email)
             send_confirmation_email(email, username)
             return RegisterUser(user=user, success_message=message)
         except IntegrityError as e:
@@ -80,9 +81,12 @@ class RequestPasswordReset(graphene.Mutation):
         user = User.objects.filter(email=valid_email).exists()
         if user:
             reset_link = password_reset_link(valid_email, user.username)
-            return RequestPasswordReset(success='Email sent with password reset details',
-                                        link=reset_link)
-        return RequestPasswordReset(error='That email does not have a registered account, Sign up for a new account.')
+            return RequestPasswordReset(
+                success='Email sent with password reset details',
+                link=reset_link)
+        return RequestPasswordReset(
+            error='That email does not have a registered account,'
+            'Sign up for a new account.')
 
 
 class Mutation(graphene.ObjectType):

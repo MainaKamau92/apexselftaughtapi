@@ -10,7 +10,8 @@ mutation {{
 
 register_user_query = '''
 mutation {
-  registerUser(username:"johnydoe" email: "johnydoe@test.com", mobileNumber:"0713116974", password: "johnydoe123"){
+  registerUser(username:"johnydoe" email: "johnydoe@test.com",
+  mobileNumber:"0713116974", password: "johnydoe123"){
     user {
       email
     }
@@ -21,7 +22,8 @@ mutation {
 '''
 register_user_query2 = '''
 mutation {
-  registerUser(username:"marydoe" email: "marydoe@test.com", mobileNumber:"0713516974", password: "marydoe123"){
+  registerUser(username:"marydoe" email: "marydoe@test.com",
+  mobileNumber:"0713516974", password: "marydoe123"){
     user {
       id
       email
@@ -33,7 +35,8 @@ mutation {
 '''
 register_user_query3 = '''
 mutation {
-  registerUser(username:"philipdoe" email: "philipdoe@test.com", mobileNumber:"0712116974", password: "philipdoe123"){
+  registerUser(username:"philipdoe" email: "philipdoe@test.com",
+  mobileNumber:"0712116974", password: "philipdoe123"){
     user {
       id
       email
@@ -45,7 +48,8 @@ mutation {
 '''
 register_user_query2 = '''
 mutation {
-  registerUser(username:"marydoe" email: "marydoe@test.com", mobileNumber:"0713516974", password: "marydoe123"){
+  registerUser(username:"marydoe" email: "marydoe@test.com",
+  mobileNumber:"0713516974", password: "marydoe123"){
     user {
       id
       email
@@ -57,7 +61,8 @@ mutation {
 '''
 register_user_query3 = '''
 mutation {
-  registerUser(username:"philipdoe" email: "philipdoe@test.com", mobileNumber:"0712116974", password: "philipdoe123"){
+  registerUser(username:"philipdoe" email: "philipdoe@test.com",
+  mobileNumber:"0712116974", password: "philipdoe123"){
     user {
       id
       email
@@ -69,7 +74,8 @@ mutation {
 '''
 invalid_register_query = '''
 mutation {
-  registerUser(username:"" email: "johnydoe@test.com", mobileNumber:"0713116974", password: "johnydoe123"){
+  registerUser(username:"" email: "johnydoe@test.com",
+  mobileNumber:"0713116974", password: "johnydoe123"){
     user {
       id
       email
