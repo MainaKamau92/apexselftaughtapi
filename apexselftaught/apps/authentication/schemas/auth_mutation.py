@@ -11,15 +11,13 @@ from apexselftaught.utils.generate_token import generate_login_token
 
 class RegisterUser(graphene.Mutation):
     user = graphene.Field(UserType)
+    message = graphene.String()
 
     class Arguments:
         username = graphene.String()
         email = graphene.String()
         password = graphene.String()
         mobile_number = graphene.String()
-
-    errors = graphene.String()
-    success_message = graphene.String()
 
     def mutate(self, info, **kwargs):
         username = kwargs.get('username')
@@ -33,17 +31,16 @@ class RegisterUser(graphene.Mutation):
             user = User.objects.create_user(**validate_data)
             user.set_password(kwargs.get('password'))
             user.save()
-            message = "User created successfully,\
-                       verification email sent to {}".format(email)
+            message = "User created successfully, verification email sent to {}".format(email)
             send_confirmation_email(email, username)
-            return RegisterUser(user=user, success_message=message)
+            return RegisterUser(user=user, message=message)
         except IntegrityError as e:
-            return RegisterUser(errors=str(e))
+            return RegisterUser(message=str(e))
 
 
 class LoginUser(graphene.Mutation):
     user = graphene.Field(UserType)
-    errors = graphene.String()
+    message = graphene.String()
     token = graphene.String()
     verification_prompt = graphene.String()
 
@@ -59,13 +56,14 @@ class LoginUser(graphene.Mutation):
         user = authenticate(username=email, password=password)
 
         error_message = 'Invalid login credentials'
+        success_message = "You logged in successfully."
         verification_error = 'Your email is not verified'
         if user:
             if user.is_verified:
                 token = generate_login_token(user)
-                return LoginUser(token=token)
+                return LoginUser(token=token, message=success_message)
             return LoginUser(verification_prompt=verification_error)
-        return LoginUser(errors=error_message)
+        return LoginUser(message=error_message)
 
 
 class RequestPasswordReset(graphene.Mutation):
@@ -86,7 +84,7 @@ class RequestPasswordReset(graphene.Mutation):
                 link=reset_link)
         return RequestPasswordReset(
             error='That email does not have a registered account,'
-            'Sign up for a new account.')
+                  'Sign up for a new account.')
 
 
 class Mutation(graphene.ObjectType):

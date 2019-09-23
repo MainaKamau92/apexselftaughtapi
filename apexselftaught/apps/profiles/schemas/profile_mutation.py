@@ -1,6 +1,5 @@
 from graphene_django import DjangoObjectType
 import graphene
-from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from apexselftaught.utils.helpers import setattr_helper
@@ -49,17 +48,14 @@ class UpdateProfile(CreateProfile, graphene.Mutation):
 
     @login_required
     def mutate(self, info, **kwargs):
-        user = info.context.user if info.context.user.is_authenticated else None
+        user = info.context.user
         profile_model = Profile.objects.get(user=user)
         if profile_model:
             setattr_helper(profile_model, **kwargs)
             profile_model.save()
-            success = "Profile updated successfully"
-            return UpdateProfile(profile=profile_model, message=success)
-        error = "An error occurred your profile has not been updated"
-        return UpdateProfile(profile=profile_model, message=error)
+            return UpdateProfile(profile=profile_model, message="Successfully updated profile")
+        return UpdateProfile(profile=profile_model, message="Could not update profile")
 
 
 class Mutation:
-    create_profile = CreateProfile.Field()
     update_profile = UpdateProfile.Field()

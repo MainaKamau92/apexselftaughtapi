@@ -2,23 +2,27 @@ from apexselftaught.apps.authentication.models import User
 from apexselftaught.apps.profiles.models import Profile
 from faker import Factory
 import factory
+from django.db.models.signals import post_save
 
 faker = Factory.create()
 
 
+@factory.django.mute_signals(post_save)
 class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = User
 
-    username = factory.LazyAttribute(lambda _: faker.user_name())
-    email = factory.LazyAttribute(lambda _: faker.ascii_email())
+    username = factory.Sequence(lambda x: "user_%d" % x)
+    email = factory.Sequence(lambda x: "user%d@apexselftaught.com" % x)
     mobile_number = factory.LazyAttribute(lambda _: faker.phone_number())
     password = faker.password(length=10, special_chars=True,
                               digits=True, upper_case=True,
                               lower_case=True)
     is_active = True
+    profile = factory.RelatedFactory('apexselftaught.tests.factories.factories.ProfileFactory', 'user')
 
 
+@factory.django.mute_signals(post_save)
 class ProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
@@ -34,4 +38,4 @@ class ProfileFactory(factory.DjangoModelFactory):
     github = faker.hostname()
     website = faker.hostname()
     date_created = faker.date(pattern="%Y-%m-%d", end_datetime=None)
-    user = factory.SubFactory(UserFactory)
+    user = factory.SubFactory(UserFactory, profile=None)

@@ -87,11 +87,6 @@ DATABASES = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--cover-erase',
-    '--cover-package=apps',  # Change `MY_APP` to your `app` name
-
-]
 GRAPHENE = {
     'SCHEMA': 'apexselftaught.schema.schema',
     'MIDDLEWARE': [

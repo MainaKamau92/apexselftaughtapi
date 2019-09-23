@@ -9,6 +9,8 @@ omit=
     apexselftaught/wsgi.py
     apexselftaught/settings.py
     apexselftaught/utils/*
+    apexselftaught/schema.py
+    apexselftaught/urls.py
 
 [report]
 show_missing=True
