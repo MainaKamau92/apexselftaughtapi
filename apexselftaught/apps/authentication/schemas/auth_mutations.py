@@ -14,14 +14,16 @@ class RegisterUser(graphene.Mutation):
     message = graphene.String()
 
     class Arguments:
-        username = graphene.String()
-        email = graphene.String()
-        password = graphene.String()
-        mobile_number = graphene.String()
+        username = graphene.String(required=True)
+        email = graphene.String(required=True)
+        password = graphene.String(required=True)
+        mobile_number = graphene.String(required=True)
+        recruiter = graphene.Boolean(required=True)
 
     def mutate(self, info, **kwargs):
         username = kwargs.get('username')
         email = kwargs.get('email')
+        recruiter = kwargs.get('recruiter')
         password = kwargs.get('password')
         mobile_number = kwargs.get('mobile_number')
 
@@ -29,6 +31,7 @@ class RegisterUser(graphene.Mutation):
             username, email, mobile_number, password)
         try:
             user = User.objects.create_user(**validate_data)
+            user.is_recruiter = recruiter
             user.set_password(kwargs.get('password'))
             user.save()
             message = "User created successfully, verification email sent to {}".format(email)
@@ -45,8 +48,8 @@ class LoginUser(graphene.Mutation):
     verification_prompt = graphene.String()
 
     class Arguments:
-        email = graphene.String()
-        password = graphene.String()
+        email = graphene.String(required=True)
+        password = graphene.String(required=True)
 
     def mutate(self, info, **kwargs):
         email = Validation.validate_email(email=kwargs.get('email'))
@@ -68,7 +71,7 @@ class LoginUser(graphene.Mutation):
 
 class RequestPasswordReset(graphene.Mutation):
     class Arguments:
-        email = graphene.String()
+        email = graphene.String(required=True)
 
     error = graphene.String()
     success = graphene.String()

@@ -1,7 +1,7 @@
 from graphene_django import DjangoObjectType
 import graphene
 from graphql_jwt.decorators import login_required
-
+from apexselftaught.utils.database import SaveContextManager, get_model_object
 from apexselftaught.utils.helpers import setattr_helper
 from ..models import Profile
 from datetime import datetime
@@ -14,7 +14,6 @@ class ProfileType(DjangoObjectType):
 
 class CreateProfile(graphene.Mutation):
     profile = graphene.Field(ProfileType)
-    success_message = graphene.String()
 
     class Arguments:
         first_name = graphene.String()
@@ -22,7 +21,6 @@ class CreateProfile(graphene.Mutation):
         secondary_email = graphene.String()
         user_bio = graphene.String()
         avatar = graphene.String()
-        country = graphene.String()
         county = graphene.String()
         industry = graphene.String()
         github = graphene.String()
@@ -31,15 +29,7 @@ class CreateProfile(graphene.Mutation):
 
     @login_required
     def mutate(self, info, **kwargs):
-        user = info.context.user
-        profile_instance = Profile()
-        if Profile.objects.filter(user=user).exists():
-            raise GraphQLError("This User already has an existing profile")
-        setattr_helper(profile_instance, **kwargs)
-        profile_instance.user = user
-        profile_instance.save()
-        success = "Profile created successfully"
-        return CreateProfile(profile=profile_instance, success_message=success)
+        pass
 
 
 class UpdateProfile(CreateProfile, graphene.Mutation):
@@ -49,11 +39,11 @@ class UpdateProfile(CreateProfile, graphene.Mutation):
     @login_required
     def mutate(self, info, **kwargs):
         user = info.context.user
-        profile_model = Profile.objects.get(user=user)
+        profile_model = get_model_object(model=Profile, column_name='user', column_value=user)
         if profile_model:
             setattr_helper(profile_model, **kwargs)
-            profile_model.save()
-            return UpdateProfile(profile=profile_model, message="Successfully updated profile")
+            with SaveContextManager(profile_model) as profile:
+                return UpdateProfile(profile=profile, message="Successfully updated profile")
         return UpdateProfile(profile=profile_model, message="Could not update profile")
 
 

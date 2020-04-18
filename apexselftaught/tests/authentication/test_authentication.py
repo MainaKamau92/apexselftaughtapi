@@ -12,7 +12,8 @@ class UserTestCase(BaseConfiguration):
             username="apex_user",
             email="user@apexselftaught.com",
             mobileNumber="0711009988",
-            password="password123"
+            password="password123",
+            recruiter="false"
         ))
         data = response.get('data')
         self.assertEqual(data["registerUser"]["message"],
@@ -23,7 +24,8 @@ class UserTestCase(BaseConfiguration):
             username="apex_user",
             email="apexselftaught.com",
             mobileNumber="0711009988",
-            password="password123"
+            password="password123",
+            recruiter="false"
         ))
         self.assertEqual(response["errors"][0]["message"],
                          "'apexselftaught.com', is an invalid email, please provide a valid email and then try again")
@@ -34,7 +36,8 @@ class UserTestCase(BaseConfiguration):
             username="apex_user",
             email="user@apexselftaught.com",
             mobileNumber="0711009988",
-            password="password123"
+            password="password123",
+            recruiter="false"
         ))
         response_data = response.get("data")
         self.assertIn("duplicate key value violates unique",

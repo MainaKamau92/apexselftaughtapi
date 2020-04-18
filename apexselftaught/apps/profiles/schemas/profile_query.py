@@ -16,10 +16,10 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_profile(self, info, **kwargs):
-        id = kwargs.get('id')
+        profile_id = kwargs.get('id')
         try:
-            return Profile.objects.get(pk=id)
-        except:
+            return Profile.objects.get(pk=profile_id)
+        except Exception:
             raise GraphQLError("Profile does not exist")
 
     @login_required

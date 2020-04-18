@@ -10,7 +10,7 @@ mutation {{
 
 register_user_query = '''
 mutation {{
-  registerUser(username:"{username}" email: "{email}", mobileNumber:"{mobileNumber}", password: "{password}"){{
+  registerUser(username:"{username}" email: "{email}", mobileNumber:"{mobileNumber}", password: "{password}", recruiter: {recruiter}){{
     user {{
       email
     }}

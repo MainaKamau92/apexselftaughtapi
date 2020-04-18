@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # will simply offer users a way to deactivate their account instead of
     # letting them delete it. That way they won't show up on the site anymore,
     # but we can still analyze the data.
-    is_active = models.BooleanField(default=True)
+    is_recruiter = models.BooleanField(default=False)
 
     # Changes to true when a user verifies their email.
     is_verified = models.BooleanField(default=False)

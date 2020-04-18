@@ -18,8 +18,8 @@ class UserFactory(factory.DjangoModelFactory):
     password = faker.password(length=10, special_chars=True,
                               digits=True, upper_case=True,
                               lower_case=True)
-    is_active = True
     profile = factory.RelatedFactory('apexselftaught.tests.factories.factories.ProfileFactory', 'user')
+    is_recruiter = False
 
 
 @factory.django.mute_signals(post_save)
@@ -32,7 +32,6 @@ class ProfileFactory(factory.DjangoModelFactory):
     secondary_email = faker.ascii_email()
     user_bio = faker.sentences(nb=3, ext_word_list=None)
     avatar = faker.hostname()
-    country = faker.country()
     county = faker.country()
     industry = faker.job()
     github = faker.hostname()

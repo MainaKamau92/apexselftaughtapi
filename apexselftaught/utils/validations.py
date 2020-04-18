@@ -17,7 +17,7 @@ class Validation:
             match = re.search(
                 r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', email, re.I)
             return match.group()
-        except:
+        except Exception:
             raise GraphQLError(
                 AUTH_ERROR_RESPONSES["invalid_email"].format(email))
 
@@ -26,7 +26,7 @@ class Validation:
         try:
             match = re.match(r'[A-Za-z0-9@#$%^&+_*()=]{8,}', password, re.I)
             return match.group()
-        except:
+        except Exception:
             raise GraphQLError(
                 AUTH_ERROR_RESPONSES["invalid_password"].format(password))
 
@@ -35,7 +35,7 @@ class Validation:
         try:
             match = re.match(r'^[a-zA-Z0-9_.-]+$', username, re.I)
             return match.group()
-        except:
+        except Exception:
             raise GraphQLError(
                 AUTH_ERROR_RESPONSES["invalid_username"].format(username))
 
@@ -44,6 +44,6 @@ class Validation:
         try:
             match = re.match(r'^(?:\+?44)?[07]\d{9,13}$', moblie_number, re.I)
             return match.group()
-        except:
+        except Exception:
             raise GraphQLError(
                 AUTH_ERROR_RESPONSES["invalid_mobile_number"].format(moblie_number))
