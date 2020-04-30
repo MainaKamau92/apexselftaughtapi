@@ -20,4 +20,4 @@ script:
   - coverage run -m pytest --reuse-db --no-migrations -vv && coverage report -m
 
 after_success:
-  - coveralls
+  - bash <(curl -s https://codecov.io/bash)

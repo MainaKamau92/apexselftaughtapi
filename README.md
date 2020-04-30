@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/MainaKamau92/apexselftaughtapi.svg?branch=develop)](https://travis-ci.com/MainaKamau92/apexselftaughtapi)
+[![Build Status](https://travis-ci.com/MainaKamau92/apexselftaughtapi.svg?token=knuFXkZEkzabFjfMc8oC&branch=develop)](https://travis-ci.com/MainaKamau92/apexselftaughtapi)
 [![Coverage Status](https://coveralls.io/repos/github/MainaKamau92/apexselftaughtapi/badge.svg)](https://coveralls.io/github/MainaKamau92/apexselftaughtapi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5cc1511bae2ce0a07de9/maintainability)](https://codeclimate.com/github/MainaKamau92/apexselftaughtapi/maintainability)
 
