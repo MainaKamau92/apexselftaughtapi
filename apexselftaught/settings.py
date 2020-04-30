@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_nose',
     'import_export',
     'apexselftaught.apps.authentication',
     'apexselftaught.apps.profiles',
@@ -80,15 +78,14 @@ WSGI_APPLICATION = 'apexselftaught.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME', 'apexselftaught'),
-        'USER': config('DB_USER', 'postgres'),
-        'PASSWORD': config('DB_PASSWORD', 'postgres'),
-        'HOST': config('HOST', 'localhost'),
-        'PORT': config('PORT', 5432),
+        'NAME': os.getenv('DB_NAME', 'apexselftaught'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        'HOST': os.getenv('HOST', 'localhost'),
+        'PORT': os.getenv('PORT', 5432),
     }
 }
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'apexselftaught.apps.core.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
@@ -141,14 +138,14 @@ USE_L10N = True
 USE_TZ = True
 
 # sendgrid settings
-SENDGRID_API_KEY = config('SENDGRID_API_KEY')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
-DOMAIN = config("DOMAIN")
-EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+DOMAIN = os.getenv("DOMAIN")
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 
 REDIRECT_LINK = DOMAIN
 
