@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'graphene_django',
+    'rest_framework',
     'django_nose',
     'import_export',
     'apexselftaught.apps.authentication',
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'apexselftaught.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates'), ],
+        'DIRS': [os.path.join(os.path.dirname(__file__), 'apps/authentication/templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,14 +89,21 @@ DATABASES = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-GRAPHENE = {
-    'SCHEMA': 'apexselftaught.schema.schema',
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'apexselftaught.apps.core.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apexselftaught.apps.authentication.backends.JWTAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'apexselftaught.apps.core.renderers.ApexJSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100,
 }
 AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

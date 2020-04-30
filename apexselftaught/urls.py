@@ -14,18 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
-from graphene_django.views import GraphQLView
-
-from apexselftaught.apps.authentication.views import activate_account, \
-    PasswordResetView
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('apexselftaught/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
-    path('apexselftaught/activate/<token>', activate_account, name='activate'),
-    path('apexselftaught/reset_password/<token>',
-         csrf_exempt(PasswordResetView.as_view()), name='reset_password'),
-
+    path('api/v1/', include(('apexselftaught.apps.authentication.urls',
+                             'apexselftaught.apps.authentication'), namespace='authentication')),
+    path('api/v1/', include(('apexselftaught.apps.profiles.urls',
+                             'apexselftaught.apps.profiles'), namespace='profile'))
 ]

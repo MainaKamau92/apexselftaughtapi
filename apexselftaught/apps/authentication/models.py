@@ -1,7 +1,11 @@
+import jwt
+import os
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
 from django.db import models
+from datetime import datetime, timedelta
+from apexselftaught.apps.core.models import TimestampedModel
 
 
 class UserManager(BaseUserManager):
@@ -39,7 +43,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     # Each `User` needs a human-readable unique identifier that we can use to
     # represent the `User` in the UI. We want to index this column in the
     # database to improve lookup performance.
@@ -71,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # A timestamp representing when this object was created.
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # A timestamp reprensenting when this object was last updated.
+    # A timestamp representing when this object was last updated.
     updated_at = models.DateTimeField(auto_now=True)
 
     # More fields required for User social login.
@@ -97,6 +101,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.email
 
+    @property
+    def token(self):
+        """
+        Allows us to get a user's token by calling `user.token` instead of
+        `user.generate_jwt_token().
+        The `@property` decorator above makes this possible. `token` is called
+        a "dynamic property".
+        """
+        return self._generate_jwt_token()
+
     def get_full_name(self):
         """
         This method is required by Django for things like handling emails.
@@ -112,3 +126,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         the user's real name, we return their username instead.
         """
         return self.username
+
+    def _generate_jwt_token(self):
+        """
+        Generates a JSON Web Token that stores this user's ID and has an expiry
+        date set to 60 days into the future.
+        """
+        dt = datetime.now() + timedelta(days=60)
+
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, os.getenv("SECRET"), algorithm='HS256')
+
+        return token.decode('utf-8')

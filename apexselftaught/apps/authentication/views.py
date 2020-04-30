@@ -1,66 +1,89 @@
-from decouple import config
-import jwt
-import json
-from django.conf import settings
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.views import View
-
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+from apexselftaught.apps.core.database import get_model_object, get_query_set
+from apexselftaught.apps.core.send_email import send_password_reset_link
+from apexselftaught.apps.authentication.serializers import (RegistrationSerializer, LoginSerializer,
+                                                            ResetPasswordRequestSerializer, ResetPasswordSerializer)
 from apexselftaught.apps.authentication.models import User
-from apexselftaught.utils.validations import Validation
-
-REDIRECT_LINK = settings.REDIRECT_LINK
-
-secret = config("SECRET")
+from apexselftaught.apps.core.utils import jwt_decode
+from apexselftaught.apps.authentication.renderers import UserJSONRenderer
 
 
-def activate_account(request, token):
-    link = None
-    secret = config("SECRET")
-    username = jwt.decode(token, secret, algorithms=['HS256'])["user"]
-    user = User.objects.get(username=username)
-    if username:
-        user.is_verified = True
-        user.save()
-        return redirect(f'{REDIRECT_LINK}/apexselftaught/')
+class RegistrationViewSet(viewsets.ViewSet, viewsets.GenericViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = RegistrationSerializer
+    renderer_classes = (UserJSONRenderer,)
 
-    if not username:
-        if user.is_verified:
-            message = "account_verification"
-            link = f'{REDIRECT_LINK}/apexselftaught/'
-            status = 409  # conflict
-        else:  # token may be expired
-            message = "account_verification_fail"
-            status = 401  # unauthorised
-    if username:  # token tampered with/corrupted
-        # link tampered with
-        message = "verification_link_corrupt"
-        status = 401
-    context = {
-        'template_type': 'Email Verification Failed',
-        'small_text_detail': message,
-        'link': link
-    }
-    return render(
-        request, 'verification.html',
-        context=context, status=status)
+    def create(self, request):
+        user = request.data.get('user', {})
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        queryset = get_query_set(User)
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
-class PasswordResetView(View):
+class EmailVerificationView(APIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
 
-    def put(self, request, token):
-        data = json.loads(request.body)
-        username = jwt.decode(token, secret, algorithms=['HS256'])["user"]
-        user = User.objects.get(username=username)
-        if username:
-            try:
-                new_password = data.get('user').get('password')
-                valid_password = Validation.validate_password(new_password)
-                user.set_password(valid_password)
-                user.save()
-                status = 200
-                return JsonResponse({"response": "Success"}, status=status)
-            except Exception as e:
-                return JsonResponse({"error": str(e)}, status=400)
+    @staticmethod
+    def get(request, token):
 
-        return JsonResponse({"fail": "Invalid token"}, status=400)
+        try:
+            payload = jwt_decode(token=token)
+            user = get_model_object(model=User, column_name="id", column_value=payload.get("id"))
+            user.is_verified = True
+            user.save()
+            return Response(dict(message="Email verified successfully"), status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response(dict(error="User with that id does not exist"), status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        user = request.data.get("user", {})
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = ResetPasswordRequestSerializer
+
+    def post(self, request):
+        user = request.data.get("user", {})
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        send_password_reset_link(serializer.data)
+        return Response({"message": "Instructions on how to reset password have been sent to your email."},
+                        status=status.HTTP_200_OK)
+
+
+class PasswordResetView(APIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = ResetPasswordSerializer
+
+    def patch(self, request, token):
+        payload = jwt_decode(token=token)
+        user = get_model_object(model=User, column_name="id", column_value=payload.get("id"))
+        password_data = request.data.get('user', {})
+        serializer = self.serializer_class(data=password_data, instance=user, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(dict(message="Password reset successfully"), status=status.HTTP_200_OK)

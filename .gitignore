@@ -108,3 +108,4 @@ db.sqlite3
 RemoteSystemsTempFiles/
 Pipfile
 Pipfile.lock
+staticfiles/

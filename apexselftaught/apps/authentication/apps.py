@@ -5,4 +5,4 @@ class AuthenticationConfig(AppConfig):
     name = 'apexselftaught.apps.authentication'
 
     def ready(self):
-        from .signals.profile_create import create_profile  # noqa
+        from .signal import create_related_profile  # noqa
