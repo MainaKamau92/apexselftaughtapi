@@ -39,7 +39,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password', 'mobile_number', 'is_recruiter']
+        fields = ['id', 'email', 'username', 'password', 'mobile_number', 'is_recruiter', 'created_at', 'updated_at']
+        read_only = ['created_at', 'updated_at']
         extra_kwargs = {
             'email': {
                 'error_messages': {

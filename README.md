@@ -1,8 +1,6 @@
 [![Build Status](https://travis-ci.com/MainaKamau92/apexselftaughtapi.svg?token=knuFXkZEkzabFjfMc8oC&branch=develop)](https://travis-ci.com/MainaKamau92/apexselftaughtapi)
-[![Coverage Status](https://coveralls.io/repos/github/MainaKamau92/apexselftaughtapi/badge.svg)](https://coveralls.io/github/MainaKamau92/apexselftaughtapi)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5cc1511bae2ce0a07de9/maintainability)](https://codeclimate.com/github/MainaKamau92/apexselftaughtapi/maintainability)
-
-
+[![codecov](https://codecov.io/gh/MainaKamau92/apexselftaughtapi/branch/develop/graph/badge.svg?token=AEIPNSXQRZ)](https://codecov.io/gh/MainaKamau92/apexselftaughtapi)
+![Django CI](https://github.com/MainaKamau92/apexselftaughtapi/workflows/Django%20CI/badge.svg)
 # Project Title
 
 Apex Online

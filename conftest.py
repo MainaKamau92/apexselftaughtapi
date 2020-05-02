@@ -12,12 +12,18 @@ def client():
 
 @pytest.fixture
 @pytest.mark.django_db
-def token():
+def user():
     user = UserFactory(
         email="user@apexselftaught.com",
         password="User1234",
         is_verified=True
     )
+    return user
+
+
+@pytest.fixture
+@pytest.mark.django_db
+def token(user):
     token = user.token
     yield f"Token {token}"
 
