@@ -21,5 +21,7 @@ urlpatterns = [
     path('api/v1/', include(('apexselftaught.apps.authentication.urls',
                              'apexselftaught.apps.authentication'), namespace='authentication')),
     path('api/v1/', include(('apexselftaught.apps.profiles.urls',
-                             'apexselftaught.apps.profiles'), namespace='profile'))
+                             'apexselftaught.apps.profiles'), namespace='profile')),
+    path('api/v1/', include(('apexselftaught.apps.portfolio.urls',
+                             'apexselftaught.apps.portfolio'), namespace='portfolio')),
 ]

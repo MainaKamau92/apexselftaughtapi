@@ -81,7 +81,7 @@ class PasswordResetView(APIView):
 
     def patch(self, request, token):
         payload = jwt_decode(token=token)
-        user = get_model_object(model=User, column_name="id", column_value=payload.get("id"))
+        user = get_model_object(model=User, column_name="username", column_value=payload.get("user"))
         password_data = request.data.get('user', {})
         serializer = self.serializer_class(data=password_data, instance=user, partial=True)
         serializer.is_valid(raise_exception=True)
