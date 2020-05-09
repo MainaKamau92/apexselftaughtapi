@@ -1,0 +1,31 @@
+# [START django_app]
+runtime: python37
+env_variables:
+  DOMAIN: http://127.0.0.1:8000
+  EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+  EMAIL_HOST: smtp.sendgrid.net
+  EMAIL_HOST_USER: apikey
+  EMAIL_PORT: 587
+  EMAIL_USE_TLS: True
+  SENDGRID_API_KEY: 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
+  SECRET_KEY: qvPp8PJtZOPhNGeLK7Ky5HiXiTZnic13
+  DB_NAME: apexselftaughtapi
+  DB_USER: maina
+  DB_PASSWORD: mainakamau
+  DB_HOST: '/cloudsql/apexselftaughtapi:us-central1:apexselftaught'
+  DB_PORT: 5432
+  DEBUG_MODE: False
+  GAE_APPLICATION: True
+handlers:
+  # This configures Google App Engine to serve the files in the app's
+  # static directory.
+  - url: /staticfiles
+    static_dir: staticfiles/
+  # This handler routes all requests not caught above to the main app.
+  # It is required when static routes are defined, but can be omitted
+  # (along with the entire handlers section) when there are no static
+  # files defined.
+  - url: /.*
+    script: auto
+
+  # [END django_app]

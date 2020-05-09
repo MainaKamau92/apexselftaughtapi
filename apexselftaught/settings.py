@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG_MODE")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["apexselftaughtapi.uc.r.appspot.com"]
 
 # Application definition
 
@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'import_export',
+    'corsheaders',
     'apexselftaught.apps.authentication',
     'apexselftaught.apps.profiles',
     'apexselftaught.apps.portfolio'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,17 +76,29 @@ WSGI_APPLICATION = 'apexselftaught.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME', 'apexselftaught'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
-        'HOST': os.getenv('HOST', 'localhost'),
-        'PORT': os.getenv('PORT', 5432),
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('DB_NAME', 'apexselftaught'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT', 5432),
+        }
     }
-}
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('DB_NAME', 'apexselftaught'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+            'HOST': os.getenv('HOST', 'localhost'),
+            'PORT': os.getenv('PORT', 5432),
+        }
+    }
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'apexselftaught.apps.core.exceptions.core_exception_handler',
@@ -148,11 +162,13 @@ DOMAIN = os.getenv("DOMAIN")
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 
 REDIRECT_LINK = DOMAIN
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
+STATIC_ROOT = 'staticfiles'
 if 'I_AM_HEROKU' in os.environ:
     # Configure Django App for Heroku.
     import django_heroku

@@ -1,5 +1,4 @@
 from rest_framework.exceptions import ValidationError
-
 from apexselftaught.apps.core.permissions import IsOwnerOnly
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, viewsets
