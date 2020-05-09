@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from apexselftaught.apps.core.permissions import IsOwnerOnly
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, viewsets
@@ -66,7 +67,10 @@ class ProgrammingLanguageSpecificsViewSet(viewsets.ViewSet, viewsets.GenericView
 
     def create(self, request):
         language_details = request.data.get('language', {})
-        language = get_model_object(ProgrammingLanguage, 'id', language_details.get('language'))
+        language_id = language_details.get('language')
+        if language_id is None:
+            raise ValidationError('language field is required.')
+        language = get_model_object(ProgrammingLanguage, 'id', language_id)
         serializer_context = {
             'user': request.user,
             'language': language
@@ -78,12 +82,13 @@ class ProgrammingLanguageSpecificsViewSet(viewsets.ViewSet, viewsets.GenericView
 
     def update(self, request, pk):
         language_details = request.data.get('language', {})
-        language = get_model_object(ProgrammingLanguage, 'id', language_details.get('language'))
+        language_id = language_details.get('language')
+        language = get_model_object(ProgrammingLanguage, 'id', language_id) if language_id is not None else None
         language_instance = get_model_object(ProgrammingLanguageSpecifics, 'id', pk)
         self.check_object_permissions(request, language_instance)
         serializer_context = {
             'user': request.user,
-            'language': language
+            'language' if language is not None else None: language
         }
         serializer = self.serializer_class(data=language_details, context=serializer_context,
                                            instance=language_instance, partial=True)
@@ -104,7 +109,7 @@ class ProgrammingLanguageSpecificsViewSet(viewsets.ViewSet, viewsets.GenericView
 
     def destroy(self, request, pk):
         language = get_model_object(ProgrammingLanguageSpecifics, 'id', pk)
-        self.check_object_permissions(language)
+        self.check_object_permissions(request, language)
         language.delete()
         return Response(dict(message=f'Programming Language specifics of id {pk} deleted.'), status=status.HTTP_200_OK)
 
@@ -179,9 +184,12 @@ class FrameworkViewSet(viewsets.ViewSet, viewsets.GenericViewSet):
 
     def create(self, request):
         framework = request.data.get('framework', {})
+        language_id = framework.get('language')
+        if language_id is None:
+            raise ValidationError('language field is required.')
         serializer_context = {
             'user': request.user,
-            'language': get_model_object(ProgrammingLanguage, 'id', framework.get('language'))
+            'language': get_model_object(ProgrammingLanguage, 'id', language_id)
         }
         serializer = self.serializer_class(data=framework, context=serializer_context)
         serializer.is_valid(raise_exception=True)
@@ -190,11 +198,13 @@ class FrameworkViewSet(viewsets.ViewSet, viewsets.GenericViewSet):
 
     def update(self, request, pk):
         framework = request.data.get('framework', {})
+        language_id = framework.get('language')
+        language = get_model_object(ProgrammingLanguage, 'id', language_id) if language_id is not None else None
         framework_instance = get_model_object(Framework, 'id', pk)
         self.check_object_permissions(request, framework_instance)
         serializer_context = {
             'user': request.user,
-            'language': get_model_object(ProgrammingLanguage, 'id', framework.get('language'))
+            'language' if language is not None else None: language
         }
         serializer = self.serializer_class(data=framework, context=serializer_context, instance=framework_instance,
                                            partial=True)

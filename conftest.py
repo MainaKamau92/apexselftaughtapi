@@ -33,3 +33,8 @@ def token(user):
 def authorized_client(client, token):
     client.credentials(HTTP_AUTHORIZATION=token)
     yield client
+
+
+@pytest.fixture
+def base_url():
+    return '/api/v1/'

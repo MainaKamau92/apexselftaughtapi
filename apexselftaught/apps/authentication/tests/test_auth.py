@@ -63,3 +63,14 @@ def test_user_cannot_login_with_invalid_credentials(client):
     }
     response = client.post('/api/v1/login/', user_data, format='json')
     assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_user_can_reset_password(client, user):
+    password_payload = {
+        "user": {
+            "password": "Lewiikamaa8"
+        }
+    }
+    response = client.patch(f'/api/v1/password-reset/{user.token}', password_payload, format='json')
+    assert response.status_code == 200

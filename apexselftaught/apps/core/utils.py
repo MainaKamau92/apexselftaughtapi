@@ -6,7 +6,7 @@ def jwt_decode(token=None):
     if token:
         payload = jwt.decode(
             token,
-            os.getenv("SECRET"),
+            os.getenv("SECRET_KEY"),
             algorithms='HS256'
         )
         return payload
