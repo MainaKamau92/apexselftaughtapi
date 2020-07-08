@@ -37,10 +37,9 @@ class EmailVerificationView(APIView):
 
     @staticmethod
     def get(request, token):
-
         try:
             payload = jwt_decode(token=token)
-            user = get_model_object(model=User, column_name="id", column_value=payload.get("id"))
+            user = get_model_object(model=User, column_name="username", column_value=payload.get("user"))
             user.is_verified = True
             user.save()
             return Response(dict(message="Email verified successfully"), status=status.HTTP_200_OK)

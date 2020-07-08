@@ -12,5 +12,6 @@ def create_related_profile(sender, instance, created, *args, **kwargs):
     # this signal to be run was an update action, we know the user already
     # has a profile.
     if instance and created:
+        print("I gets called >>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         instance.profile = Profile.objects.create(user=instance)
         send_confirmation_email(instance)

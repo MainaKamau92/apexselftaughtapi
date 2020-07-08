@@ -24,4 +24,6 @@ urlpatterns = [
                              'apexselftaught.apps.profiles'), namespace='profile')),
     path('api/v1/', include(('apexselftaught.apps.portfolio.urls',
                              'apexselftaught.apps.portfolio'), namespace='portfolio')),
+    path('api/v1/', include(('apexselftaught.apps.tenant.urls',
+                             'apexselftaught.apps.tenant'), namespace='tenant')),
 ]

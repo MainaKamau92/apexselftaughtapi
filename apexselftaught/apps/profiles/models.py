@@ -8,7 +8,7 @@ class Profile(TimestampedModel):
     last_name = models.CharField(max_length=250, null=True)
     secondary_email = models.EmailField(max_length=250, null=True)
     user_bio = models.TextField(null=True)
-    avatar = models.URLField(null=True)
+    avatar = models.FileField(null=True)
     county = models.CharField(max_length=150, null=True)
     industry = models.CharField(max_length=255, null=True)
     github = models.URLField(null=True)

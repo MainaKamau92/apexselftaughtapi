@@ -19,6 +19,8 @@ def test_user_can_create_certification(authorized_client, base_url):
 
 @pytest.mark.django_db
 def test_user_can_edit_certificate(authorized_client, base_url, user):
+    # import pdb;
+    # pdb.set_trace()
     certificate = CertificationFactory(user=user)
     edit_data = {
         "certificate": {

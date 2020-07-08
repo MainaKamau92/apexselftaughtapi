@@ -7,13 +7,11 @@ from apexselftaught.apps.profiles.tests.factories import ProfileFactory
 def test_user_can_update_profile(authorized_client, user):
     ProfileFactory(id=1, user=user)
     edit_data = {
-        "profile": {
             "first_name": "Anton",
             "last_name": "LaVey"
         }
-    }
-    response = authorized_client.put('/api/v1/profiles/1', edit_data, format='json')
-    assert response.data["first_name"] == edit_data["profile"]["first_name"]
+    response = authorized_client.put('/api/v1/profiles/1', edit_data, format='multipart')
+    assert response.data["first_name"] == edit_data["first_name"]
     assert response.status_code == 200
 
 
